@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101311"><meta name="description" content="Wildline Racing. Race Tropical Storm Coast in a buggy, rally car or sports SUV.">
+  <title>Wildline Racing · Race hub</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23ff803b'/%3E%3Cpath d='M7 19h9l3 18 9-18h8l3 18 11-18h9L41 48H31l-3-16-8 16h-9z' fill='%23171b17'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css"><script defer src="build/wildline.js"></script>
+</head><body>
+<main id="hub">
+  <header class="topbar">
+    <button class="brand" data-action="hub" aria-label="Wildline Racing home"><svg viewBox="0 0 64 42" aria-hidden="true"><path fill="currentColor" d="M1 5h10l4 21L26 5h10l3 21L52 5h11L42 38H31l-3-19-10 19H7z"/></svg><span>WILDLINE<small>RACING</small></span></button>
+    <nav aria-label="Main navigation"><button class="nav-link active" data-action="hub">Race hub</button><button class="nav-link" data-action="garage">Garage</button><button class="nav-link" data-action="log">Race log</button></nav>
+    <div class="header-right"><button class="credits" data-action="log" title="Driver profile"><i data-icon="coin"></i><span id="credits">0</span><span class="credit-unit">CR</span></button><span class="divider"></span><button class="icon-button" data-action="settings" aria-label="Open settings"><i data-icon="settings"></i></button></div>
+  </header>
+  <section class="hub-content" aria-label="Race hub">
+    <div class="hub-line"><div class="page-label"><span class="signal-stripes" aria-hidden="true"></span> Race hub</div><button class="control-shortcut" data-action="controls"><i data-icon="gamepad"></i> Controls</button></div>
+    <section class="hero" aria-labelledby="event-title">
+      <div class="hero-copy"><div class="eyebrow event-tag"><span class="orange-rule"></span> Regional series <span class="tag-divider">/</span> Round 01</div>
+        <h1 id="event-title">TROPICAL<br>STORM COAST</h1>
+        <div class="hero-meta"><span><i data-icon="pin"></i> Port Kauri Island</span><b></b><span><i data-icon="flag"></i> Circuit race</span></div>
+        <div class="hero-actions"><button class="primary" data-action="race"><i data-icon="flag"></i> Start race <i data-icon="arrow"></i></button><button class="secondary" data-action="brief"><i data-icon="map"></i> Track briefing</button></div>
+      </div><div class="hero-weather"><i data-icon="storm"></i><span>Dynamic weather</span></div>
+    </section>
+    <div class="loadout-head"><h2>Race setup</h2><span class="line"></span><span class="eyebrow muted">Pre-race</span></div>
+    <div class="setup-grid">
+      <button class="setup-card vehicle-card" data-action="garage"><div id="vehicle-art" class="vehicle-art"></div><div class="card-content"><div class="eyebrow"><i data-icon="car"></i> Your vehicle</div><h3 id="equipped-name">Dunefox XR</h3><p id="equipped-type">Off-road buggy</p><div class="card-action">Open garage <i data-icon="arrow"></i></div></div></button>
+      <button class="setup-card route-card" data-action="brief"><canvas id="hub-map" aria-label="Map of the 6.4 kilometre circuit"></canvas><div class="card-content"><div class="eyebrow"><i data-icon="route"></i> Course map</div><h3>6.4 <small>km</small></h3><p>2 shortcuts</p><div class="card-action">Explore route <i data-icon="arrow"></i></div></div></button>
+      <button class="setup-card format-card" data-action="settings"><div class="card-content"><div class="eyebrow"><i data-icon="sliders"></i> Race format</div><div class="format-values"><span><strong>03</strong><em>Laps</em></span><b></b><span><strong>08</strong><em>AI rivals</em></span></div><div class="card-action"><span id="difficulty-label">Sport</span> difficulty <i data-icon="arrow"></i></div></div></button>
+    </div>
+    <footer class="hub-footer"><span><span class="status-dot"></span> Local race</span><span>Best lap <strong id="best-lap">—</strong></span></footer>
+  </section>
+</main>
+<section id="racing" hidden aria-label="Race">
+  <canvas id="world" aria-label="Live three-dimensional racing view"></canvas>
+  <div id="lens"></div><div id="cockpit" hidden><span></span></div>
+  <div id="hud">
+    <div class="race-top"><div class="position-panel hud-plate"><span class="hud-label">Position</span><div><strong id="pos">9</strong><small> / 9</small></div></div><div class="lap-panel hud-plate"><span class="hud-label">Lap</span><b id="lap">1 / 3</b></div><div class="race-location"><i class="signal-stripes"></i><span>Tropical Storm Coast</span></div><div class="timer-panel hud-plate"><span class="hud-label">Race time</span><b id="race-time">0:00.000</b></div><button class="hud-button" data-action="pause" aria-label="Pause race"><i data-icon="pause"></i></button></div>
+    <div id="notice" aria-live="polite"></div><div id="countdown" hidden></div>
+    <div class="race-bottom"><div class="track-hud hud-plate"><canvas id="mini-map" aria-label="Live positions on the circuit"></canvas><span class="hud-label" id="sector-num">Sector 01</span><b id="sector">Port Kauri</b></div>
+      <div class="item-hud hud-plate"><div class="hud-label"><kbd>E</kbd> Ability</div><b id="item">Empty slot</b></div>
+      <div class="speed-hud hud-plate"><div class="speed-row"><b id="gear">1</b><strong id="speed">0</strong><span>km/h</span></div><div class="meter rpm"><i id="rpm"></i></div><div class="telemetry-line"><span>RPM</span><b id="rpm-num">1000</b></div><div class="meter"><i id="boost-bar"></i></div><div class="telemetry-line"><span>Boost <kbd>⇧</kbd></span><b id="energy">45%</b></div><div class="integrity"><i data-icon="wrench"></i> Body <b id="health">100%</b></div></div>
+    </div>
+    <div id="touch-controls"><div><button data-input="ArrowLeft" aria-label="Steer left">‹</button><button data-input="ArrowRight" aria-label="Steer right">›</button></div><div><button data-input="Space">Drift</button><button data-input="ShiftLeft">Boost</button><button data-input="KeyE">Use</button><button data-input="ArrowDown">Brake</button><button data-input="ArrowUp">Gas</button></div></div>
+    <pre id="debug" hidden></pre>
+  </div>
+</section>
+<dialog id="panel"><div class="dialog-shell"><div class="dialog-head"><div><div class="eyebrow" id="dialog-kicker">Wildline Racing</div><h2 id="dialog-title"></h2></div><button class="icon-button" data-action="close" aria-label="Close dialog"><i data-icon="x"></i></button></div><div id="dialog-body"></div></div></dialog>
+<div id="loading" hidden><span class="signal-stripes"></span><strong>Preparing the grid</strong></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<noscript>Enable JavaScript to drive the local Wildline Racing circuit.</noscript>
+</body></html>

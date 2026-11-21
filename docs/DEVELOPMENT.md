@@ -1,0 +1,37 @@
+# First playable development record
+
+The Windows build in index.html is the normal entry point for each in-game check. For source iteration, rebuild with npm run build, refresh and select Start race. The simulation tests use npm test. Editor setup for this delivery is a text editor, Node and a WebGL 2 browser. The UE5 responsibility map and asset authoring setup are in TECHNICAL-DESIGN.md.
+
+| Step and objective | Files / code and implementation | Setup and test procedure | Common failure to check | Next step |
+| --- | --- | --- | --- | --- |
+| 01 · Separate simulation from rendering | config.js, track.js and profile.js hold tuning, survey and persistence | Run the Node tests without a browser | A renderer dependency leaking into a simulation import | Integrate the chassis |
+| 02 · Establish vehicle feel | vehicle.js integrates propulsion, grip, steering assist, four spring states and collision loss | Compare fixed throttle, braking and slide recovery for three chassis | A fixed-speed clamp on a surface transition causes a sudden jerk | Place chase camera |
+| 03 · Maintain visibility | world.js damps camera lead, height and speed-based FOV | Press C through chase, close, hood, cockpit and trackside views | Camera clips into the roof or follows wheel noise | Construct the route |
+| 04 · Survey the island | track.js and scenery.js generate twelve sectors, bridge, tunnel, jump and two measured bypasses | Open Track briefing and drive into each signed half-road | A branch ends on a different heading or sits under its terrain | Validate timing |
+| 05 · Complete a race | race.js orders 36 gates, interpolates crossing times and locks finish order | Run the full seeded event test and inspect splits | A branch grants an extra lap or an unfinished car receives a time | Populate the grid |
+| 06 · Race eight rivals | race.js translates lookahead, closing speed, terrain and personality into normal driver input | Start on Sport, observe passing and compare finish distances across difficulties | A slower approach blocks every following driver | Balance energy |
+| 07 · Reward vehicle control | vehicle.js and race.js charge energy for slides, draft, near misses, pickups and landings | Handbrake with steering, straighten and hold Shift | Energy drains when throttle is closed | Integrate abilities |
+| 08 · Let pickups change decisions | race.js assigns a bounded position-weighted item per slot | Cross a mint strip and press E. Test shield and repair with the Node suite | A stationary car farms one strip repeatedly | Add collisions |
+| 09 · Make obstacles consequential | scenery.js, vehicle.js and race.js share obstacle locations and dimensions | Hit a timber crate, then compare with a rock and the service strip | A destroyed obstacle remains active in the simulation | Drive the squall |
+| 10 · Change road conditions | race.js samples continuous local wetness. world.js adjusts lighting, fog, rain, road response and wind | Drive the ridge and compare grip with the harbour in F3 | An entire circuit changes surface instantly | Layer effects |
+| 11 · Show tire and water feedback | world.js uses bounded spray and tire-mark pools, waves, lens effects and exhaust | Drift on sand, enter the crossing and use nitro | Effects grow unbounded or obscure the road | Tie effects to damage |
+| 12 · Make damage legible | models.js adds scuffs, mud and a darkened rear lamp. vehicle.js caps performance loss | Strike a hard obstacle, inspect Body, then use repair | A light collision repeatedly subtracts health | Connect race screens |
+| 13 · Make the whole event navigable | index.html, styles.css, main.js and interface.js implement hub, HUD, minimap, pause, results and controls | Launch the checked-in build and run tools/browser-check.js | Focus loss leaves throttle held or a paused clock advances | Save the loadout |
+| 14 · Preserve garage progress | profile.js validates local data and awards a result once. main.js equips three chassis and buys tunes | Equip a car, reload, finish and purchase a 400 CR tune | Double rewards, negative balance or a missing save crashes startup | Mix audio |
+| 15 · Couple audio to driving | audio.js synthesizes RPM voices, transient impacts, tire scrubbing, weather and panned nearby rivals | Start through the button to unlock audio. Compare the three engines and mute in Settings | Suspended audio context or sound continuing on pause | Measure the race |
+| 16 · Bound render cost | scenery.js instances props by sector, world.js culls chunks and limits particles. Settings selects four rendering budgets | Toggle F3, compare preset, calls, FPS, contact state and route progress | Software rendering gives a misleading hardware frame-rate estimate | Check the full entry path |
+| 17 · Verify and package | tests/race.test.js, tools/browser-check.js, tools/serve.js and build/wildline.js | Build, run the deterministic suite, then the browser smoke check. Inspect race and hub captures | File-origin textures, browser storage or a stale bundle breaks the delivered entry point | Validate handling and frame budgets on target hardware |
+
+## Validation evidence
+
+The deterministic nine-car Sport run completed all 36 gates in second place with buggy splits of 182.4, 179.1 and 177.7 seconds. Tests cover both fork entries and rejoins, separate chassis behaviour, braking, drift energy, jump landing, shield, repair, finish rewards, tune purchase and save round-tripping.
+
+The Chrome smoke test exercised the offline build at 1440 × 920 and the hub at 390 × 844. It selected a rally car, changed graphics settings, accelerated through the race start, cycled camera, inspected telemetry, paused, resumed and reloaded the saved loadout. A second browser test accelerated frame timestamps and held throttle through all three laps. It reached the real results screen with nine classified drivers, three lap splits, a total of 10:05.350, 180 credits and 100 XP. It then returned to the hub successfully.
+
+## Delivery limits
+
+The road graphics update passed five simulation checks, including asphalt crown height, muddy wheel channels and continuity where shortcuts rejoin. A High-preset Chrome drive completed all three laps with the new renderer. In-game captures cover the coastal highway, crossing, timber bridge, basalt tunnel, storm ridge and mud trail. The native Intel UHD adapter reported 115 FPS in one opening-grid sample at 1440 × 920. Reflection updates run at a separate cadence from simulation and display.
+
+The playable uses route-assisted vehicle dynamics and procedural environments with original texture atlases. Water crossings apply changing drag and lateral wave forces, and tires throw spray. Mud and sand retain tire marks in a bounded pool. Production-grade deformable terrain, a free-driving rigid chassis, recorded vehicle audio, replay recording, expanded championships, night races and online services are future work. The technical design describes the native UE5 port. A compiled native UE5 project and console builds require their respective toolchains.
+
+Graphics presets, culling, telemetry and a repeatable smoke check are present. The 60 FPS minimum across the whole course requires reference-PC profiling. At the village start, one headless Chrome run using the Intel UHD Direct3D 11 adapter reported 138 FPS, 187 draw calls and 87,404 triangles on Medium at 1440 × 920. This is a short telemetry sample. A separate software-rendered run registered roughly 11 FPS at the grid.
